@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+{%load static %}
+
+<html>
+<style>
+img.resize{
+   max-width:100%;
+   max-height:100%;
+}
+</style>
+    <head>
+        <title>About Rango</title>
+    </head>
+
+    <body>
+        <h1>Rango says...</h1>
+        meh <strong>{{ boldmessage }}</strong><br />
+        <a href="/rango/">Home</a><br />
+	<img class="resize" src="{% static "s.jpg" %}" alt="Picture of Mountains" /> 
+    </body>
+
+</html>
