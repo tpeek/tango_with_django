@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-#'''
+
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User)
@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
         return self.user.username
-#'''
+
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     views = models.IntegerField(default=0)
