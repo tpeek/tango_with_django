@@ -9,10 +9,23 @@ class UserProfile(models.Model):
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    #username = models.CharField(max_length=128, unique=True)
+    #firstName = models.CharField(max_length=128)
+    #lastName = models.CharField(blank=True)
+    #email = models.EmailField(blank=True)
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
         return self.user.username
+
+    def getUsername(self):
+        return self.user.username
+
+    def getWebsite(self):
+        return self.user.website
+
+    def getEmail(self):
+        return self.user.email
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
