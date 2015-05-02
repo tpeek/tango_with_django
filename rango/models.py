@@ -14,7 +14,6 @@ class UserProfile(models.Model):
     #lastName = models.CharField(blank=True)
     #email = models.EmailField(blank=True)
 
-    # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
         return self.user.username
 
@@ -29,21 +28,3 @@ class UserProfile(models.Model):
     
     def delete(self):
         self = None
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-    views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
-
-    def __unicode__(self):
-        return self.name
-
-class Page(models.Model):
-    category = models.ForeignKey(Category)
-    title = models.CharField(max_length=128)
-    url = models.URLField()
-    views = models.IntegerField(default=0)
-
-    def __unicode__(self):
-        return self.title
