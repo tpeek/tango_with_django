@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 
 
-<!--just do a big ol form in here and fill the value part of the element with the default value of whatever it already is for the user. still havent figured out the sibmit part yet thouhg. maybe just delete the user then send the stuff on the the regular register thing or copy it or something.-->
-
-
 <html>
     <head>
         <title>Rango</title>
     </head>
 
     <body>
-{% if user %}
-        <h1>{{ user }}</h1>
-        
-            <li>Username: {{ user.getUsername }} &nbsp;&nbsp;&nbsp;&nbsp; Website: {{user.website}} &nbsp;&nbsp;&nbsp;&nbsp; Email: {{user.getEmail}}</a></li>
-            <a href="/rango/register/">Edit</a><br />
-        {% else %}
-            The specified user does not exist!
-        {% endif %}
+
+
+    Username: {{user.getUsername}}<br>
+
+    Email: {{user.getEmail}}<br>
+
+    Password: ********<br>
+
+    Website: {{user.website}}<br>
+
+    
+    <a href="/rango/register/{{user.getUsername}}">Edit User</a><br />
+    
+
     </body>
 </html>

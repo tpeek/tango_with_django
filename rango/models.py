@@ -26,6 +26,10 @@ class UserProfile(models.Model):
 
     def getEmail(self):
         return self.user.email
+    
+    def delete(self):
+        self = None
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
