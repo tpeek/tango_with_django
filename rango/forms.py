@@ -5,18 +5,20 @@ from django.contrib.auth.models import User
 class UserForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput())
     email = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField()
-    #password = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(widget=forms.PasswordInput(render_value=True))
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'password', 'email')
 
 
 class UserProfileForm(forms.ModelForm):
-    website = forms.CharField(widget=forms.TextInput())
+    first_name = forms.CharField(widget=forms.TextInput())
+    last_name = forms.CharField(widget=forms.TextInput(), required=False)
+    website = forms.CharField(widget=forms.TextInput(), required=False)
+    
     
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('first_name', 'last_name', 'website', 'picture')
 

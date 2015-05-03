@@ -7,12 +7,11 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     # The additional attributes we wish to include.
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128, blank=True)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    #username = models.CharField(max_length=128, unique=True)
-    #firstName = models.CharField(max_length=128)
-    #lastName = models.CharField(blank=True)
-    #email = models.EmailField(blank=True)
+    
 
     def __unicode__(self):
         return self.user.username
@@ -20,11 +19,5 @@ class UserProfile(models.Model):
     def getUsername(self):
         return self.user.username
 
-    def getWebsite(self):
-        return self.user.website
-
     def getEmail(self):
         return self.user.email
-    
-    def delete(self):
-        self = None

@@ -2,6 +2,15 @@
 
 
 <html>
+
+<style>
+img.resize{
+   max-width:80%;
+   max-height:80%;
+}
+</style>
+
+
     <head>
         <title>Rango</title>
     </head>
@@ -11,14 +20,22 @@
 
     Username: {{user.getUsername}}<br>
 
+    Password: ********<br>
+
     Email: {{user.getEmail}}<br>
 
-    Password: ********<br>
+    First Name: {{user.first_name}}<br>
+
+    Last Name: {{user.last_name}}<br>
 
     Website: {{user.website}}<br>
 
+    {% if user.picture %}
+    	<img class="resize" src="{{user.picture.url}}" alt="Profile Picture" /> <br>
+    {% endif %}
     
     <a href="/rango/register/{{user.getUsername}}">Edit User</a><br />
+    <a href="/rango/delete/{{user.getUsername}}/">Delete User</a><br />
     
 
     </body>
