@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To Do List</title>
+    	<style type="text/css">
+    		h1, h5{
+    			background-color: silver;
+    			text-align: center;
+    			color: black;
+    		}
+		body{
+			background-color: blue;
+			margin-left: 30%;
+			margin-right: 30%;
+			border: 4px solid silver;
+			padding: 10px 10px 10px 10px;
+			text-align: center;
+			color: white;
+		}
+	</style>
+    <h1>To Do List</h1>
+  </head>
+
+  <body>
+
+  	<div id="div1">
+  		<p id="p1"></p>
+	</div>
+	<input type="text" id="textInput" autofocus>
+  	<input type="submit" value="Enter" onclick="add()">
+  </body>
+
+	<script type="text/javascript">
+ 		counter = 0;
+    	function add() {
+    		var enteredText = document.getElementById("textInput").value;
+    		document.getElementById("textInput").value = "";
+    		var newElement = document.createElement("p");
+    		newElement.setAttribute("onClick", "remove()");
+			newElement.setAttribute("id", counter);
+			var textNode = document.createTextNode(enteredText);
+			newElement.appendChild(textNode);
+
+			if (counter == 0){
+				var temp = document.getElementById("p1");
+			}
+			else {
+				for(i=counter-1; i>=0; i--){
+					if (document.getElementById(i) != null){
+						var temp = document.getElementById(i);
+						break;
+					}
+				}
+			}
+			var element = document.getElementById("div1");
+			element.insertBefore(newElement, temp);
+			counter += 1;
+			document.getElementById("textInput").focus();
+    	}
+    </script>
+<br><br><br><h5><a href="/rango/about">Back</a></h5>
+</html>

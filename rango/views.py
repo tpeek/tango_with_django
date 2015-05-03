@@ -11,26 +11,31 @@ from django.contrib.auth.models import User
 
 
 
+# Make a new user or edit an existing one.
 def register(request, username_url=None):
     context = RequestContext(request)
 
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
+    # Tells register.html if registration has succeeded or not.
     registered = False
 
+    # These keep track of user information in the case of an edit.
     oldUser = None
     oldPassword = None
     oldPicture = None
 
-    users = UserProfile.objects.all() 
-    for each_user in users:
-        if each_user.getUsername() == username_url:
-            oldUser = each_user
-            oldPassword = oldUser.user.password
-            oldPicture = oldUser.picture
+    # Find the user that is currently being edited.
+    if username_url != None:
+        users = UserProfile.objects.all() 
+        for each_user in users:
+            if each_user.getUsername() == username_url:
+                oldUser = each_user
+                oldPassword = oldUser.user.password
+                oldPicture = oldUser.picture
 
+    # If the user has submitted the form, process it.
     if request.method == 'POST':
         if oldUser:
+            # Change the username of the old user so that vaidation works.
             oldUser.user.username = 'a' + oldUser.user.username
             oldUser.user.save()
             
@@ -40,16 +45,15 @@ def register(request, username_url=None):
         profile_form = UserProfileForm(data=request.POST)
 
 
-        # If the two forms are valid...
+        # If the two forms are valid,
         if user_form.is_valid() and profile_form.is_valid():
             if oldUser:
                 oldUser.user.delete()
                 oldUser.delete()
-            # Save the user's form data to the database.
+            # then save the user's form data.
             user = user_form.save()
 
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
+            # Password is hashed.
             if oldUser: # If this is an update to an existing user,
                 if user.password != '*******': # and the password is updated, 
                     user.set_password(user.password)# change it.
@@ -60,26 +64,21 @@ def register(request, username_url=None):
             else:
                 user.set_password(user.password)
                 user.save()
-              
-
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
+            
             profile = profile_form.save(commit=False)
             profile.user = user
 
             # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
+            # If so, we need to get it from the input form and
+            # put it in the UserProfile model.
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
             elif oldUser:
                 profile.picture = oldPicture
             
-
-            # Now we save the UserProfile model instance.
             profile.save()
 
-            # Update our variable to tell the template registration was successful.
+            # Registration was successful.
             registered = True
 
         # Invalid form or forms - mistakes or something else?
@@ -87,6 +86,7 @@ def register(request, username_url=None):
         # They'll also be shown to the user.
         else:
             print user_form.errors, profile_form.errors
+            # Change the username back.
             if oldUser:
                 oldUser.user.username = oldUser.user.username[1:]
                 oldUser.user.save()
@@ -110,32 +110,23 @@ def register(request, username_url=None):
 
 
 def user_login(request):
-    # Like before, obtain the context for the user's request.
     context = RequestContext(request)
 
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
         username = request.POST['username']
         password = request.POST['password']
 
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
 
         # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
         if user:
             # Is the account active? It could have been disabled.
             if user.is_active:
                 # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
                 login(request, user)
                 return HttpResponseRedirect('/rango/index/')
             else:
-                # An inactive account was used - no logging in!
                 return HttpResponse("Your Rango account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
@@ -143,64 +134,38 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
     else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
         return render_to_response('rango/login.html', {}, context)
 
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
 @login_required
 def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
     logout(request)
 
-    # Take the user back to the homepage.
+    # Take the client back to the homepage.
     return HttpResponseRedirect('/rango/')
 
 
-def decode_url(category_name_url):
-    return category_name_url.replace('_', ' ')
-
-#@login_required
-
-
+# List all the users with links to their detail page.
 def index(request):
-    # Obtain the context from the HTTP request.
     context = RequestContext(request)
 
-    # Query the database for a list of ALL categories currently stored.
-    # Order the categories by no. likes in descending order.
-    # Retrieve the top 5 only - or all if less than 5.
-    # Place the list in our context_dict dictionary which will be passed to the template engine.
     user_list = UserProfile.objects.all()
-    #user_list = UserProfile.objects[:]
-    context_dict = {'user_list': user_list,}# 'users': user_list}
+    context_dict = {'user_list': user_list}
 
-    # We loop through each category returned, and create a URL attribute.
-    # This attribute stores an encoded URL (e.g. spaces replaced with underscores).
-    #for category in category_list:
-
-    # Render the response and send it back!
     return render_to_response('rango/index.html', context_dict, context)
 
+
+# Send client to about.html.
 def about(request):
-    # Request the context of the request.
-    # The context contains information such as the client's machine details, for example.
     context = RequestContext(request)
 
-    # Construct a dictionary to pass to the template engine as its context.
-    # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-    context_dict = {'boldmessage': "I am bold font from the context"}
-
-    # Return a rendered response to send to the client.
-    # We make use of the shortcut function to make our lives easier.
-    # Note that the first parameter is the template we wish to use.
-    return render_to_response('rango/about.html', context_dict, context)
+    return render_to_response('rango/about.html', context)
 
 
-
+# Allows someone who is logged in to edit each user attribute.
+@login_required
 def editUser(request, username_url):
     context = RequestContext(request)
     users = UserProfile.objects.all()
@@ -209,23 +174,24 @@ def editUser(request, username_url):
         if each_user.getUsername() == username_url:
             user = each_user
 
-    # Create a context dictionary which we can pass to the template rendering engine.
-    # We start by containing the name of the category passed by the user.
     context_dict = {'user': user, 'username_url': username_url}
 
     # Go render the response and return it to the client.
     return render_to_response('rango/user.html', context_dict, context)
 
 
+# Allows someone who is logged in to delete a user.
+@login_required
 def deleteUser(request, username_url):
     context = RequestContext(request)
     userToDelete = UserProfile.objects.get(first_name=username_url)
     userToDelete.user.delete()
     userToDelete.delete()
-    
 
     return render_to_response('rango/delete.html', {'username_url':username_url}, context)
 
 
-    
+# Send client to todo.html.
+def todo(request):
+    return render_to_response('rango/todo.html')
         

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Rango</title>
+        <title>Login</title>
     </head>
 
     <body>
-        <h1>Login to Rango</h1>
-
+        <h1>Login</h1>
+	<p>You must log in before editing or deleting other users.<p>
         <form id="login_form" method="post" action="/rango/login/">
             {% csrf_token %}
             Username: <input id="username" type="text" name="username" value="" size="50"/>
@@ -18,15 +18,12 @@
         </form>
 <br>
 <a href="/rango/register/">Register Here</a><br />
-<a href="/rango/index/">Index</a><br />
+<a href="/rango/index/">User List</a><br />
+<a href="/rango/about/">About</a><br />
 
 <script type="text/javascript>
 document.getElementById('username').value = 'admin';
 </script>
-
-
-
-
 
     </body>
 </html>

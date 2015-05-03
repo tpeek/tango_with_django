@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Rango</title>
+        <title>Register</title>
     </head>
 
     <body>
-        <h1>Register with Rango</h1>
+        <h1>Register</h1>
 
         {% if registered %}
-        Rango says: <strong>thank you for registering!</strong>
-        <a href="/rango/">Return to the homepage.</a><br />
+        <strong>Thank you!</strong><br><br>
+        <a href="/rango/index">User List</a><br>
         {% else %}
-        Rango says: <strong>register here!</strong><br />
 
         <form id="user_form" method="post" action="/rango/register/{{username_url}}/"
                 enctype="multipart/form-data">
@@ -27,7 +26,7 @@
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Register" />
         </form><br>
-<a href="/rango/index/">Index</a><br />
+<a href="/rango/index/">User List</a><br>
         {% endif %}
     </body>
 </html>

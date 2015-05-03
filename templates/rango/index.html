@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Rango</title>
+        <title>Index</title>
     </head>
 
     <body>
         {% if user.is_authenticated %}
-	<h1>Rango says... hello {{ user.username }}!</h1>
+	<h1>Why... Hello {{ user.username }}!</h1>
 	{% else %}
-	<h1>Rango says... hello world!<br></h1>
+	<h1>Why... Hello there!<br></h1>
 	{% endif %}
 
         {% if user_list %}
             <ul>
                 {% for user in user_list %}
-                <!-- Following line changed to add an HTML hyperlink -->
-
-<li><a href="/rango/user/{{ user.getUsername }}">{{ user.getUsername }}</a></li>
-
-                
+			<li><a href="/rango/user/{{ user.getUsername }}">{{ user.getUsername }}</a></li>
                 {% endfor %}
             </ul>
        {% else %}
             <strong>There are no users present.<br></strong>
        {% endif %}
-
-
-
-
+	<a href="/rango/register/">Add a User</a><br>
 	{% if user.is_authenticated %}
-		<a href="/rango/register/">Add a User</a><br />
-		<a href="/rango/logout/">Logout</a><br />
+		<a href="/rango/logout/">Logout</a><br>
 	{% else %}
-		<a href="/rango/register/">Add a User</a><br />
-		<a href="/rango/login/">Login</a><br />
+		<a href="/rango/login/">Login</a><br>
 	{% endif %}
     </body>
 </html>

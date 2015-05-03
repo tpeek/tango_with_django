@@ -28,7 +28,7 @@ img.resize{
 
     Last Name: {{user.last_name}}<br>
 
-    Website: {{user.website}}<br>
+    Website: {{user.website}}<br><br>
 
     {% if user.picture %}
     	<img class="resize" src="{{user.picture.url}}" alt="Profile Picture" /> <br>
@@ -36,6 +36,7 @@ img.resize{
     
     <a href="/rango/register/{{user.getUsername}}">Edit User</a><br />
     <a href="/rango/delete/{{user.getUsername}}/">Delete User</a><br />
+    <a href="/rango/index/">User List</a><br />
     
 
     </body>
