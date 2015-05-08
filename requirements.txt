@@ -1,0 +1,7 @@
+Django==1.8
+django-registration-redux==1.1
+httplib2==0.9
+Pillow==2.8.1
+six==1.8.0
+twilio==3.6.9
+virtualenv==12.1.1
